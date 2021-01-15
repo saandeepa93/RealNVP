@@ -53,6 +53,8 @@ class Resnet(nn.Module):
     self.in_norm = nn.BatchNorm2d(in_channel)
     self.in_conv = WNConv2d(2 * in_channel, mid_channel, kernel=3, padding=1, bias=True)
 
+    self.in_skip = WNConv2d(mid_channel, mid_channel, kernel=1, padding=0, bias=True)
+
     self.resnet = nn.ModuleList()
     for _ in range(n_block):
       self.resnet.append(ResidualBlock(mid_channel, mid_channel))
@@ -72,10 +74,16 @@ class Resnet(nn.Module):
     x = F.relu(x)
     x = self.in_conv(x)
 
-    for resblock in self.resnet:
-      x = resblock(x)
+    x_skip = self.in_skip(x)
+
+    # for resblock in self.resnet:
+    #   x = resblock(x)
+
+    for block, skip in zip(self.resnet, self.skips):
+      x = block(x)
+      x_skip += skip(x)
     
-    x = self.out_norm(x)
+    x = self.out_norm(x_skip)
     x = F.relu(x)
     x = self.out_conv(x)
     return x
