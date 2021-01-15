@@ -1,0 +1,7 @@
+.venv
+__pycache__
+.vscode
+img_align_celeba
+input
+MNIST
+shed

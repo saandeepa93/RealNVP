@@ -1,0 +1,11 @@
+params:
+  n_flows: 5
+  n_block: 1
+  num_scales: 2
+  in_channel: 1
+  epochs: 1
+  batch_size: 64
+  lr: 1e-3
+  no_cuda: True
+  data_root: ./img_align_celeba
+  img_sz: 32
