@@ -2,7 +2,7 @@ params:
   n_flows: 5
   n_block: 1
   num_scales: 2
-  in_channel: 1
+  in_channel: 3
   epochs: 1
   batch_size: 64
   lr: 1e-3

@@ -44,14 +44,14 @@ if __name__ == '__main__':
   device = "cuda" if use_cuda else "cpu"
   kwargs = {'num_workers': 1, 'pin_memory': True} if device=="cuda" else {}
 
-  transform = transforms.Compose([transforms.Resize((img_sz, img_sz)), transforms.ToTensor()])
-  train_dataset = MNIST(root=opt.root, train=True, transform=transform, \
-    download=True)
-  train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, \
-  **kwargs)
+  # transform = transforms.Compose([transforms.Resize((img_sz, img_sz)), transforms.ToTensor()])
+  # train_dataset = MNIST(root=opt.root, train=True, transform=transform, \
+  #   download=True)
+  # train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, \
+  # **kwargs)
 
-  # dataset = CustomDataset(data_root, img_sz)
-  # train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+  dataset = CustomDataset(data_root, img_sz)
+  train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
   # model = Resnet(in_channel, 64, n_block, img_sz)
   # model = Coupling(in_channel, 64, n_block, n_flows, img_sz, False, "cb")
@@ -65,10 +65,10 @@ if __name__ == '__main__':
     model = DataParallel(model, device_ids=[0, 1, 2, 3])
     model = model.to(device)
   
-  z_sample = torch.randn((1, 1, 32, 32), dtype=torch.float32).to(device)
+  z_sample = torch.randn((1, 3, 32, 32), dtype=torch.float32).to(device)
 
   for epoch in range(epochs):
-    for b, (x, _) in enumerate(train_loader, 0):
+    for b, x in enumerate(train_loader, 0):
       model.train()
       optimizer.zero_grad()
       x = x.to(device)
@@ -88,8 +88,8 @@ if __name__ == '__main__':
         else:
           x = model.reverse(z_sample)
         x = torch.sigmoid(x)
-        show(x.squeeze().detach().cpu(), os.path.join(root, f"./samples/{epoch}_{b}_{str((torch.round(loss * 10**3)/10**3).item())}.png"), 1)
-        # show(x.squeeze().permute(1, 2, 0).detach().cpu(), os.path.join(root, f"./samples/{epoch}_{b}_{str((torch.round(loss * 10**3)/10**3).item())}.png"), 1)
+        # show(x.squeeze().detach().cpu(), os.path.join(root, f"./samples/{epoch}_{b}_{str((torch.round(loss * 10**3)/10**3).item())}.png"), 1)
+        show(x.squeeze().permute(1, 2, 0).detach().cpu(), os.path.join(root, f"./samples/{epoch}_{b}_{str((torch.round(loss * 10**3)/10**3).item())}.png"), 1)
     # if epoch % 3 == 0:
     #   lr = lr * 0.1 
     #   for param_group in optimizer.param_groups:

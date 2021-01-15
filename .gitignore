@@ -5,3 +5,5 @@ img_align_celeba
 input
 MNIST
 shed
+.gitignore
+.DS_store
