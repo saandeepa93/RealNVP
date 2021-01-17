@@ -8,4 +8,4 @@ params:
   lr: 1e-3
   no_cuda: True
   data_root: ./img_align_celeba
-  img_sz: 32
+  img_sz: 128

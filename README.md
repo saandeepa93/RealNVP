@@ -16,10 +16,7 @@ The inference after each epoch is generated under the *sample* directory
 ## **Samples**
 
 ### *MNIST*
-<img src="./samples/9_234_3488.948.png">
-<img src="./samples/97_234_864.647.png">
-<img src="./samples/199_234_860.3770000000001.png">
+<img src="./samples/197_234_784.547.png">
 
 ### *Celeba*
-<img src="./samples/celeba.png">
-<img src="./samples/33_256_7622.09.png">
+<img src="./samples/199_0_7129.819.png">

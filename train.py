@@ -65,7 +65,6 @@ if __name__ == '__main__':
     model = DataParallel(model, device_ids=[0, 1, 2, 3])
     model = model.to(device)
   
-  z_sample = torch.randn((1, 3, 32, 32), dtype=torch.float32).to(device)
 
   for epoch in range(epochs):
     for b, x in enumerate(train_loader, 0):
@@ -81,15 +80,18 @@ if __name__ == '__main__':
       grad_clipping(optimizer)
       optimizer.step()
       print(f"loss at batch {b} epoch {epoch}: {loss.item()}")
-      if b == len(train_loader) - 1:
+      if b == 0: #len(train_loader) - 1:
+        z_sample = torch.randn((16, 3, 32, 32), dtype=torch.float32).to(device)
         model.eval()
         if use_cuda:
           x = model.module.reverse(z_sample)
         else:
           x = model.reverse(z_sample)
-        x = torch.sigmoid(x)
+        images = torch.sigmoid(x)
+        images_concat = utils.make_grid(images, nrow=int(16 ** 0.5), padding=2, pad_value=255)
+        utils.save_image(images_concat, os.path.join(root, f"./samples/{epoch}_{b}_{str((torch.round(loss * 10**3)/10**3).item())}.png"))
         # show(x.squeeze().detach().cpu(), os.path.join(root, f"./samples/{epoch}_{b}_{str((torch.round(loss * 10**3)/10**3).item())}.png"), 1)
-        show(x.squeeze().permute(1, 2, 0).detach().cpu(), os.path.join(root, f"./samples/{epoch}_{b}_{str((torch.round(loss * 10**3)/10**3).item())}.png"), 1)
+        # show(x.squeeze().permute(1, 2, 0).detach().cpu(), os.path.join(root, f"./samples/{epoch}_{b}_{str((torch.round(loss * 10**3)/10**3).item())}.png"), 1)
     # if epoch % 3 == 0:
     #   lr = lr * 0.1 
     #   for param_group in optimizer.param_groups:
