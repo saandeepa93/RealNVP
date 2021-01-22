@@ -281,7 +281,7 @@ class RealNVP(nn.Module):
 class Flow(nn.Module):
   def __init__(self, in_channel, mid_channel, n_block, n_flows, img_sz, num_scales):
     super(Flow, self).__init__()
-    self.flows = RealNVP(0, in_channel, 128, n_block, n_flows, img_sz, num_scales)
+    self.flows = RealNVP(0, in_channel, 64, n_block, n_flows, img_sz, num_scales)
 
   def preprocess(self, x):
     self.data_constraint = torch.tensor([0.9], dtype=float, device = x.device)

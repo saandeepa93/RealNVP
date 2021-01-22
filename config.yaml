@@ -1,11 +1,13 @@
 params:
   n_flows: 5
-  n_block: 1
+  n_block: 4
   num_scales: 2
   in_channel: 3
   epochs: 1
-  batch_size: 64
+  batch_size: 256
   lr: 1e-3
   no_cuda: True
   data_root: ./img_align_celeba
-  img_sz: 128
+  img_sz: 32
+  test: 1
+  model_path: models/checkpoint.pth.tar
